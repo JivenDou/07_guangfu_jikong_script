@@ -1,0 +1,12 @@
+{
+  "hardDiskdataBase":{
+    "ip": "127.0.0.1",
+    "username": "root",
+    "password": "5BFkezzPY1C0/2/y2pMrag==\n",
+    "dataBaseName": "centralized_control_guangfu"
+  },
+  "memoryDatabase": {
+    "ip": "127.0.0.1",
+    "port": 6379
+  }
+}
