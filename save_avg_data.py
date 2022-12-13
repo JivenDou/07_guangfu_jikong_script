@@ -32,25 +32,27 @@ class SaveAvgData(threading.Thread):
         while True:
             time.sleep(0.2)
             for device_info in device_infos:
+                # device_info : {'avg_sec': 10, 'device_names': ['PZ72_DE_C_4', 'PZ72_DE_C_5', 'CR1000X_2'], 'last_save_time': 0}
                 avg_sec = device_info['avg_sec']
                 device_names = device_info['device_names']
                 last_save_time = device_info['last_save_time']
                 now_time = time.time()
-
+                # 若现在距离上一次存过了avg_sec秒
                 if now_time - last_save_time >= avg_sec:
+                    # 记录本次时间
                     device_info['last_save_time'] = int(now_time)
                     save_time = int(now_time) - int(now_time) % avg_sec
                     save_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(save_time))
-                    print(save_time)
-                    print(avg_sec, device_names)
-
+                    # print(save_time)
+                    # print(avg_sec, device_names)
                     # 遍历所有设备
                     for device_name in device_names:
                         new_table_name = f"copy_table_{device_name}"
                         # 获取平均的数据
                         datas = self.get_avg_datas(device_name, avg_sec)
-                        # print(now_time, datas)
+                        # print(datas)
                         # 判断如果都是空值就不插入了
+                        # datas：{'c1507': None, 'c1508': None, 'c1509': None, 'c1510': None, 'c1511': None}
                         flag = False
                         for data in datas.values():
                             if data is not None:
@@ -61,7 +63,7 @@ class SaveAvgData(threading.Thread):
                             points = [i for i in datas.keys()]
                             value = ['NULL' if i is None else str(i) for i in datas.values()]
                             sql = f"INSERT INTO {new_table_name}(times,{','.join(points)}) VALUES('{save_time}',{','.join(value)})"
-                            print(sql)
+                            # print(sql)
                             self._storage.hardDiskStorage.execute_sql(sql)
 
     def get_avg_datas(self, device_name, avg_sec):
@@ -90,10 +92,8 @@ class SaveAvgData(threading.Thread):
         for d in datas:  # 将decimal转float
             if not isinstance(datas[d], float) and datas[d] is not None:
                 datas[d] = float(datas[d])
-        # print(datas)
         return datas
 
-    # def insert_avg_datas(self, device_name):
 
 if __name__ == '__main__':
     saveAvgData = SaveAvgData()

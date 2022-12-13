@@ -13,6 +13,7 @@ from sanic import response
 from event_storage import EventStorage
 from utility import Utility
 from historical_data_storage import HistoricalDataStorage
+from save_avg_data import SaveAvgData
 from alarm import Alarm
 from reset_remote_control import ResetRemoteControl
 from reset_remote_control import ResetRemoteControl
@@ -93,5 +94,5 @@ if __name__ == "__main__":
     # 存历史数据
     HistoricalDataStorage().start()
     # 存平均值数据
-
+    SaveAvgData().start()
     # app.run(host="0.0.0.0", port=18080, workers=1)
