@@ -1,4 +1,15 @@
-from . import modbus_rtu_over_tcp_connector
-from . import http_connector
 from . import zuhe_tcp_connector
+from . import yingli1_modbus_rtu_over_tcp_connector
+from . import yingli2_modbus_rtu_over_tcp_connector
+from . import leida_fuzhao_modbus_rtu_over_tcp_connector
+from . import atesi_fuzhao_modbus_rtu_over_tcp_connector
+from . import jingke2_modbus_rtu_over_tcp_connector
+from . import jingke1_modbus_rtu_over_tcp_connector
+from . import a_pingtai_modbus_rtu_over_tcp_connector
+from . import b_pingtai_modbus_rtu_over_tcp_connector
+from . import c_pingtai_modbus_rtu_over_tcp_connector
+from . import d_pingtai_modbus_rtu_over_tcp_connector
+from . import moxa5430_1_modbus_rtu_over_tcp_connector
+from . import moxa5430_3_modbus_rtu_over_tcp_connector
+from . import moxa5430_4_modbus_rtu_over_tcp_connector
 

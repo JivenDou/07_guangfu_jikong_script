@@ -5,10 +5,10 @@ import time
 from modbus_tk import modbus_rtu_over_tcp
 from connector import Connector
 from event_storage import EventStorage
-from logging_config import modbus_connector as logger
+from logging_config import moxa5430_4_modbus_connector as logger
 
 
-class ModbusRtuOverTcpConnector(Connector, threading.Thread):
+class MOXA54304ModbusRtuOverTcpConnector(Connector, threading.Thread):
     def __init__(self, name, config, converter):
         super().__init__()
         self._master = None
@@ -151,7 +151,7 @@ class ModbusRtuOverTcpConnector(Connector, threading.Thread):
                     logger.error("modbus_rtu,write[ERROR]:" + str(e))
             else:
                 try:
-                    time.sleep(0.2)
+                    time.sleep(0.05)
                     result = self.exec_command(command=command_item)
                     format_data = None
                     # print(self.__data_point_config)

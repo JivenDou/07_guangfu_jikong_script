@@ -7,13 +7,13 @@
 import binascii
 import math
 import struct
-from logging_config import modbus_converter as logger
+from logging_config import c_pingtai_modbus_converter as logger
 from converter import Converter
 from event_storage import EventStorage
 from tools.format_value import format_value
 
 
-class ModbusConverter(Converter):
+class CPingTaiModbusConverter(Converter):
     list = []
 
     def __init__(self, name):
