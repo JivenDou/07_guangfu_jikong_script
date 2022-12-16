@@ -2,7 +2,8 @@
 def format_value(index, value):
     """格式化数据"""
     if value is not None:
-        value = float(value)
+        if index["storage_type"] == "float":
+            value = float(value)
         round_ = index['round']
         divisor = index['divisor']
         offset = index['offset']

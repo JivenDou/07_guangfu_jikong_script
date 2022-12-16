@@ -16,17 +16,23 @@ class ZuHeConverter(Converter):
     def convert(self, config, data):
         if data:
             try:
+                # print(data)
                 data = data.decode().split(',')
-                del data[0]
+                data = data[1:-1]
+                # del data[-1]
                 logger.info(f"({self.name}姿态定位组合传感器)原始数据: {data}")
                 dic = {}
-                for index in config:
-                    name = 'c' + str(index['serial_number'])
-                    i = int(index['address'])
-                    # 格式化数据
-                    dic[name] = format_value(index, data[i])
-                logger.info(f"{self.name}(姿态定位组合传感器)解析后数据：{data}")
-                return dic
+                if len(data) == 11:
+                    for index in config:
+                        name = 'c' + str(index['serial_number'])
+                        i = int(index['address'])
+                        print(name, data[i])
+                        # 格式化数据
+                        dic[name] = format_value(index, data[i])
+                    logger.info(f"{self.name}(姿态定位组合传感器)解析后数据：{data}")
+                    return dic
+                else:
+                    return "error"
             except Exception as e:
                 logger.error(e)
                 return "error"

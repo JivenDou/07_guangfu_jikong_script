@@ -151,7 +151,7 @@ class LeiDaFuZhaoModbusRtuOverTcpConnector(Connector, threading.Thread):
                     logger.error("modbus_rtu,write[ERROR]:" + str(e))
             else:
                 try:
-                    time.sleep(0.05)
+                    time.sleep(0.1)
                     result = self.exec_command(command=command_item)
                     format_data = None
                     # print(self.__data_point_config)

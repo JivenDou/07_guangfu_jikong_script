@@ -35,6 +35,7 @@ class JingKe1ModbusConverter(Converter):
             return_data = None
             try:
                 for index in config:
+                    # print(index["device_id"])
                     if int(index["device_id"]) == int(device_id):
                         # addr_type : 'D' 或 'X';
                         # addr_list: [10] 或 [10, 5]
@@ -116,6 +117,7 @@ class JingKe1ModbusConverter(Converter):
                             else:
                                 logger.error(f"don't have D or X")
                             name = 'c' + str(index['serial_number'])
+                            # print(name, return_data)
                             # 格式化数据
                             format_data_dict[name] = format_value(index, return_data)
 
