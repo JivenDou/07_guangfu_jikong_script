@@ -88,11 +88,15 @@ class SaveAvgData(threading.Thread):
         # print(now_time, before_time)
         # 获取数据信息
         sql = f"SELECT {','.join(points)} FROM `{old_table_name}` WHERE times<='{now_time}' AND times>='{before_time}';"
-        datas = self._storage.hardDiskStorage.execute_sql(sql)[0]
-        for d in datas:  # 将decimal转float
-            if not isinstance(datas[d], float) and datas[d] is not None:
-                datas[d] = float(datas[d])
-        return datas
+        datas = self._storage.hardDiskStorage.execute_sql(sql)
+        if datas:
+            datas = datas[0]
+            for d in datas:  # 将decimal转float
+                if not isinstance(datas[d], float) and datas[d] is not None:
+                    datas[d] = float(datas[d])
+            return datas
+        else:
+            return {'c0': None}
 
 
 if __name__ == '__main__':
