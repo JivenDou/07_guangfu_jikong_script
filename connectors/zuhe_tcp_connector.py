@@ -30,7 +30,6 @@ class ZuHeTcpConnector(Connector, threading.Thread):
         self.__last_save_time = 0
         self.__data_point_config = self.__storager.get_station_info(name)
         self.__command = self.__storager.get_command_info(name)
-        self.send_flag = True
 
     def open(self):
         self.__stopped = False
@@ -39,16 +38,15 @@ class ZuHeTcpConnector(Connector, threading.Thread):
     def run(self):
         self.__connect()  # 建立socket连接
         self.__connected = True
+        # 先发一次指令
+        # if isinstance(self.__command, list):
+        #     for i in self.__command:
+        #         command_list = json.loads(i['command'])
+        #         # print(command_list[0])
+        #         self.send_command(command_list[0])
         while True:
-            if isinstance(self.__command, list):
-                for i in self.__command:
-                    command_list = json.loads(i['command'])
-                    self.command_polling(command_list=command_list)
-                    time.sleep(self.__save_frequency)
-            else:
-                self.command_polling()
-            # time.sleep(1)
-
+            self.command_polling()
+            time.sleep(self.__save_frequency)
             if self.__stopped:
                 break
 
@@ -114,6 +112,20 @@ class ZuHeTcpConnector(Connector, threading.Thread):
             except Exception as e:
                 logger.info(f'Send command to [{self.name}]:[{self.__ip}]:[{self.__port}] error:{e}')
 
+    def send_byte(self, byte_data):
+        if self.__sock:
+            try:
+                # print(command['instruct'])
+                # com = bytes.fromhex(command['instruct'])
+                # print(byte_data)
+                self.__sock.send(byte_data)
+                return True
+            except Exception as e:
+                logger.info(f'Send command to [{self.name}]:[{self.__ip}]:[{self.__port}] error:{e}')
+                return False
+        else:
+            return False
+
     # 监听数据
     def listen_data(self):
         try:
@@ -137,14 +149,10 @@ class ZuHeTcpConnector(Connector, threading.Thread):
     # 重复发送命令获取数据
     def command_polling(self, command_list=None):
         try:
-            if self.send_flag:
-                # 发送一次命令
-                self.send_command(command_list[0])
-                self.send_flag = False
             # 一直监听消息
             recv_data = self.listen_data()
             format_data = self.__converter.convert(self.__data_point_config, recv_data)
-            logger.info(f'{self.name} : {format_data}')
+            # logger.info(f'{self.name} : {format_data}')
             if format_data and format_data != "error" and format_data != 'pass':
                 self.__storager.real_time_data_storage(format_data)
         except Exception as e:

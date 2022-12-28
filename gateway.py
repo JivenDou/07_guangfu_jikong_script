@@ -39,18 +39,19 @@ gateway_storage = EventStorage()
 connector_config = gateway_storage.get_connector_config()
 Utility.start_connectors(connector_config)
 
-#
-# @app.route('/readRealText', methods=['POST'])
-# async def read_point_data_text(request):
-#     list = request.json['pointList']
-#     dict = gateway_storage.get_real_data(list)
-#     point_list = gateway_storage.get_point_info(list)
-#     data_list = {}
-#     for info in point_list:
-#         data_list[info['io_point_name']] = str(dict["c"+str(info['serial_number'])]) + " " +str(info['unit'])
-#     return response.json(data_list)
-#
-#
+
+@app.route('/readRealText', methods=['POST'])
+async def read_point_data_text(request):
+    list = request.json['pointList']
+    dict = gateway_storage.get_real_data(list)
+    # print(dict)
+    point_list = gateway_storage.get_point_info(list)
+    data_list = {}
+    for info in point_list:
+        data_list[info['io_point_name']] = str(dict["c"+str(info['serial_number'])]) + " " +str(info['unit'])
+    return response.json(dict)
+
+
 # @app.route('/readReal', methods=['POST'])
 # async def read_point_data(request):
 #     list = request.json['pointList']
@@ -92,7 +93,7 @@ Utility.start_connectors(connector_config)
 
 if __name__ == "__main__":
     # 存历史数据
-    HistoricalDataStorage().start()
+    # HistoricalDataStorage().start()
     # 存平均值数据
-    SaveAvgData().start()
-    # app.run(host="0.0.0.0", port=18080, workers=1)
+    # SaveAvgData().start()
+    app.run(host="0.0.0.0", port=18080, workers=1)

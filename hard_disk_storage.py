@@ -242,9 +242,14 @@ class HardDiskStorage:
                 sql = sql + data
             sql = sql + ")"
             try:
+                start = time.time()
                 self.cursor.execute(sql)
                 # 提交到数据库执行
-                self.conn.commit()
+                # self.conn.commit()
+                end = time.time()
+                interval = end - start
+                print('插入耗时：', interval * 1000, ' 毫秒')
+                # print(sql)
             except Exception as e:
                 # 如果发生错误则回滚
                 self.conn.rollback()

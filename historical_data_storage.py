@@ -41,10 +41,11 @@ class HistoricalDataStorage(threading.Thread):
                 all_devices.append(temp_dict)
         while 1:
             time.sleep(0.2)
+            # print('================================================================================')
             for item in all_devices:
                 save_frequency = item['save_frequency']
                 last_save_time = item['last_save_time']
-                now_time = time.time()
+                now_time = int(time.time())
 
                 serial_number_list = item['serial_number_list']
                 real_time_data = self._storage.memoryStorage.get_value(serial_number_list)  # 根据键列表查询实时数据库
@@ -52,6 +53,7 @@ class HistoricalDataStorage(threading.Thread):
                     item['last_save_time'] = now_time
                     save_time = int(now_time) - int(now_time) % save_frequency
                     save_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(save_time))
+                    # print(save_time)
                     # print(real_time_data)
                     flag = False  # 是否允许存储标志位
                     for key in real_time_data:

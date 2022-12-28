@@ -1,4 +1,5 @@
 from . import zuhe_tcp_connector
+from . import qianxun_tcp_connector
 from . import yingli1_modbus_rtu_over_tcp_connector
 from . import yingli2_modbus_rtu_over_tcp_connector
 from . import leida_fuzhao_modbus_rtu_over_tcp_connector

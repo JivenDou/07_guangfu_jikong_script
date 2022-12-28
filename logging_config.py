@@ -24,6 +24,12 @@ LOGGING_CONFIG = dict(
             "propagate": True,
             "qualname": "zuhe_tcp_connector.debug",
         },
+        "qianxun_tcp_connector": {
+            "level": "DEBUG",
+            "handlers": ["console", "qianxun_tcp_connector"],
+            "propagate": True,
+            "qualname": "qianxun_tcp_connector.debug",
+        },
         "yingli1_modbus_connector": {
             "level": "DEBUG",
             "handlers": ["console", "yingli1_modbus_connector"],
@@ -206,6 +212,15 @@ LOGGING_CONFIG = dict(
         "zuhe_tcp_connector": {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'log/zuhe_tcp_connector/zuhe_tcp_connector.log',
+            'maxBytes': 10 * 1024 * 1024,
+            'delay': True,
+            "formatter": "generic",
+            "backupCount": 20,
+            "encoding": "utf-8"
+        },
+        "qianxun_tcp_connector": {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'log/qianxun_tcp_connector/qianxun_tcp_connector.log',
             'maxBytes': 10 * 1024 * 1024,
             'delay': True,
             "formatter": "generic",
@@ -468,6 +483,7 @@ LOGGING_CONFIG = dict(
 general = logging.getLogger("general")
 # 连接器
 zuhe_tcp_connector = logging.getLogger("zuhe_tcp_connector")
+qianxun_tcp_connector = logging.getLogger("qianxun_tcp_connector")
 yingli1_modbus_connector = logging.getLogger("yingli1_modbus_connector")
 yingli2_modbus_connector = logging.getLogger("yingli2_modbus_connector")
 leida_fuzhao_modbus_connector = logging.getLogger("leida_fuzhao_modbus_connector")

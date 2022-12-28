@@ -151,14 +151,14 @@ class YingLi1ModbusRtuOverTcpConnector(Connector, threading.Thread):
                     logger.error("modbus_rtu,write[ERROR]:" + str(e))
             else:
                 try:
-                    time.sleep(0.05)
+                    time.sleep(0.03)
                     result = self.exec_command(command=command_item)
                     format_data = None
                     # print(self.__data_point_config)
                     # print(result)
                     if result:
                         format_data = self.__converter.convert(self.__data_point_config, result)
-                    logger.info(f'{self.name}/device_id={result[0]}: {format_data}')
+                    # logger.info(f'{self.name}/device_id={result[0]}: {format_data}')
                     if format_data and format_data != "error" and format_data != 'pass':
                         # 往redis存储数据
                         self.__storager.real_time_data_storage(format_data)
