@@ -29,7 +29,7 @@ class ZuHeConverter(Converter):
                             # 解析数据
                             dat = dat.split(',')
                             dat = dat[1:-1]
-                            logger.info(f"{self.name}(姿态定位组合传感器)原始数据: {dat}")
+                            # logger.info(f"{self.name}(姿态定位组合传感器)原始数据: {dat}")
                             dic = {}
                             if len(dat) == 11:
                                 for index in config:
@@ -44,7 +44,7 @@ class ZuHeConverter(Converter):
                             # 判断正常或异常
                             station_name = config[0]['station_name']
                             dic = {station_name: dat}
-                            # logger.info(f"{self.name}(GNGGA数据):{dic}")
+                            logger.info(f"{self.name}(GNGGA数据):{dic}")
                             self.__storager.real_time_data_storage(dic)
                         else:
                             # 可能会有空格，所以什么也不做

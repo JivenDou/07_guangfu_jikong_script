@@ -16,7 +16,6 @@ from historical_data_storage import HistoricalDataStorage
 from save_avg_data import SaveAvgData
 from alarm import Alarm
 from reset_remote_control import ResetRemoteControl
-from reset_remote_control import ResetRemoteControl
 from logging_config import LOGGING_CONFIG
 import logging.config
 

@@ -5,6 +5,7 @@
 # import json
 import time
 import threading
+import multiprocessing
 import socket
 import base64
 # import queue
@@ -68,11 +69,11 @@ class QianXunConnector(Connector, threading.Thread):
     def __connect(self):
         if self.__sock:
             self.__sock.close()
-        # self.__sock = socket.socket()
-        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 允许重用本地地址和端口
-        self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  # 在客户端开启心跳维护
-        self.__sock.settimeout(10)  # 设置超时时间10s
+        self.__sock = socket.socket()
+        # self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 允许重用本地地址和端口
+        # self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  # 在客户端开启心跳维护
+        self.__sock.settimeout(2)  # 设置超时时间2s
         try:
             self.__sock.connect((self.__ip, self.__port))
             # self.__sock.connect(('ntrip.qxwz.com', 8002))
@@ -91,11 +92,11 @@ class QianXunConnector(Connector, threading.Thread):
             try:
                 if self.__sock:
                     self.__sock.close()
-                # self.__sock = socket.socket()
-                self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  # 在客户端开启心跳维护
-                self.__sock.settimeout(10)  # 设置超时时间10s
+                self.__sock = socket.socket()
+                # self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                # self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                # self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)  # 在客户端开启心跳维护
+                self.__sock.settimeout(2)  # 设置超时时间2s
                 self.__sock.connect((self.__ip, self.__port))
                 self.__connected = True
                 logger.info(f'Reconnect to [{self.name}]:[{self.__ip}]:[{self.__port}] success !')
@@ -126,10 +127,6 @@ class QianXunConnector(Connector, threading.Thread):
             try:
                 com = command.encode()
                 # print(com + b'\r\n')
-                # # Regester
-                # self.__sock.send(b'GET /RTCM32_GGB HTTP/1.0\r\n')
-                # self.__sock.send(b'User-Agent: NTRIP GNSSInternetRadio/1.4.10\r\n')
-                # self.__sock.send(b'Authorization: Basic ' + base64.encodebytes((self.__userid + ':' + self.__password).encode()) + b'\r\n\r\n')
                 self.__sock.send(com + b'\r\n')
             except Exception as e:
                 logger.info(f'Send command to [{self.name}]:[{self.__ip}]:[{self.__port}] error:"{e}"')
@@ -166,6 +163,7 @@ class QianXunConnector(Connector, threading.Thread):
                 # print("recv_data:", recv_data)
                 # 判空
                 if recv_data and recv_data != b' ' and recv_data != b'ICY 200 OK\r\n\r\n':
+                    # pass
                     # 获取四个传感器连接对象，对设备分发差分数据
                     a_zuhe = utility.Utility.available_connectors["A_ZuHe"]
                     b_zuhe = utility.Utility.available_connectors["B_ZuHe"]
@@ -177,7 +175,7 @@ class QianXunConnector(Connector, threading.Thread):
                     d_zuhe.send_byte(recv_data)
 
                     # if a_zuhe.send_byte(recv_data):
-                        # logger.info(f'a_zuhe send success')
+                    #     logger.info(f'a_zuhe send success')
                     # if b_zuhe.send_byte(recv_data):
                         # logger.info(f'b_zuhe send success')
                     # if c_zuhe.send_byte(recv_data):
