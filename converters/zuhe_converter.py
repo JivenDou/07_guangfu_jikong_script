@@ -10,6 +10,7 @@ from tools.format_value import format_value
 from event_storage import EventStorage
 
 
+
 class ZuHeConverter(Converter):
     def __init__(self, name):
         self.name = name
@@ -23,13 +24,15 @@ class ZuHeConverter(Converter):
                 # print(data[0])
                 # 判断byte数据以 $ 开头
                 if data[0] == 36:
+                    # print(data)
                     datas = data.decode().split('\r\n')
+                    # print(datas)
                     for dat in datas:
                         if dat.startswith("$INSPVAA"):
                             # 解析数据
                             dat = dat.split(',')
                             dat = dat[1:-1]
-                            # logger.info(f"{self.name}(姿态定位组合传感器)原始数据: {dat}")
+                            logger.info(f"{self.name}原始数据: {dat}")
                             dic = {}
                             if len(dat) == 11:
                                 for index in config:
@@ -38,17 +41,20 @@ class ZuHeConverter(Converter):
                                     # print(name, dat[i])
                                     # 格式化数据
                                     dic[name] = format_value(index, dat[i])
-                                # logger.info(f"{self.name}(姿态定位组合传感器)解析后数据：{dic}")
+                                # logger.info(f"{self.name}解析后数据：{dic}")
                         elif dat.startswith("$GNGGA"):
-                            # 存到redis
-                            # 判断正常或异常
-                            station_name = config[0]['station_name']
-                            dic = {station_name: dat}
-                            logger.info(f"{self.name}(GNGGA数据):{dic}")
-                            self.__storager.real_time_data_storage(dic)
+                            da = dat.split(',')
+                            if len(da) == 15:
+                                # 存到redis
+                                # 判断正常或异常
+                                station_name = config[0]['station_name']
+                                dicc = {station_name: dat}
+                                self.__storager.real_time_data_storage(dicc)
+                                # logger.info(f"{self.name}(GNGGA数据):{dic}")
                         else:
                             # 可能会有空格，所以什么也不做
                             pass
+                    logger.info(f"{self.name}解析后数据：{dic}")
                     return dic
             except Exception as e:
                 logger.error(f"{self.name}:{e}")

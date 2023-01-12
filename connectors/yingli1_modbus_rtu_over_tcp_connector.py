@@ -158,7 +158,7 @@ class YingLi1ModbusRtuOverTcpConnector(Connector, threading.Thread):
                     # print(result)
                     if result:
                         format_data = self.__converter.convert(self.__data_point_config, result)
-                    # logger.info(f'{self.name}/device_id={result[0]}: {format_data}')
+                    logger.info(f'{self.name}/device_id={result[0]}: {format_data}')
                     if format_data and format_data != "error" and format_data != 'pass':
                         # 往redis存储数据
                         self.__storager.real_time_data_storage(format_data)

@@ -92,7 +92,7 @@ async def read_point_data_text(request):
 
 if __name__ == "__main__":
     # 存历史数据
-    # HistoricalDataStorage().start()
+    HistoricalDataStorage().start()
     # 存平均值数据
-    # SaveAvgData().start()
+    SaveAvgData().start()
     app.run(host="0.0.0.0", port=18080, workers=1)

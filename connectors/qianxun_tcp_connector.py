@@ -59,6 +59,7 @@ class QianXunConnector(Connector, threading.Thread):
                     command = command_dic[key]
                     break
             if command:
+                # print(command)
                 self.command_polling(command=command)
             time.sleep(self.__save_frequency)
 
@@ -165,23 +166,23 @@ class QianXunConnector(Connector, threading.Thread):
                 if recv_data and recv_data != b' ' and recv_data != b'ICY 200 OK\r\n\r\n':
                     # pass
                     # 获取四个传感器连接对象，对设备分发差分数据
-                    a_zuhe = utility.Utility.available_connectors["A_ZuHe"]
-                    b_zuhe = utility.Utility.available_connectors["B_ZuHe"]
-                    c_zuhe = utility.Utility.available_connectors["C_ZuHe"]
+                    # a_zuhe = utility.Utility.available_connectors["A_ZuHe"]
+                    # b_zuhe = utility.Utility.available_connectors["B_ZuHe"]
+                    # c_zuhe = utility.Utility.available_connectors["C_ZuHe"]
                     d_zuhe = utility.Utility.available_connectors["D_ZuHe"]
-                    a_zuhe.send_byte(recv_data)
-                    b_zuhe.send_byte(recv_data)
-                    c_zuhe.send_byte(recv_data)
+                    # a_zuhe.send_byte(recv_data)
+                    # b_zuhe.send_byte(recv_data)
+                    # c_zuhe.send_byte(recv_data)
                     d_zuhe.send_byte(recv_data)
 
                     # if a_zuhe.send_byte(recv_data):
-                    #     logger.info(f'a_zuhe send success')
+                    #     print(f'a_zuhe send success')
                     # if b_zuhe.send_byte(recv_data):
-                        # logger.info(f'b_zuhe send success')
+                    #     print(f'b_zuhe send success')
                     # if c_zuhe.send_byte(recv_data):
-                        # logger.info(f'c_zuhe send success')
+                    #     print(f'c_zuhe send success')
                     # if d_zuhe.send_byte(recv_data):
-                        # logger.info(f'd_zuhe send success')
+                    #     print(f'd_zuhe send success')
 
             except Exception as e:
                 logger.error(f'Other error occur [{self.name}]:[{self.__ip}]:[{self.__port}]:{e}')
